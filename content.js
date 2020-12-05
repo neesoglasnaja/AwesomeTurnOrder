@@ -137,7 +137,7 @@
         if (window.top === window.self) {
             (function doCheckDepsLoaded() {
                 if (document.readyState === 'complete' && window.Campaign && window.Campaign.initiativewindow) {
-                    initTurnOrderPatch();
+                    if (window.is_gm) initTurnOrderPatch();
                 } else {
                     setTimeout(doCheckDepsLoaded, 500);
                 }
