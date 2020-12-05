@@ -1,0 +1,21 @@
+{
+    "name": "Awesome Turn Order",
+    "description": "Turn order's popup enhancements for Roll20 App",
+    "version": "1.0",
+    "manifest_version": 2,
+    "content_scripts": [
+        {
+            "matches": [
+                "https://app.roll20.net/editor",
+                "https://app.roll20.net/editor#*",
+                "https://app.roll20.net/editor?*",
+                "https://app.roll20.net/editor/",
+                "https://app.roll20.net/editor/#*",
+                "https://app.roll20.net/editor/?*"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ]
+}
