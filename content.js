@@ -28,6 +28,46 @@
             </li>
         ]]>`;
 
+        const initEventsForTurnOrder = ($initiativeContent) => {
+            const $initiativeDialog = $initiativeContent.closest('[role="dialog"]:not(.__awesome-turn-order)');
+            if ($initiativeDialog) {
+                $initiativeDialog.classList.add('__awesome-turn-order');
+                $initiativeDialog.style.setProperty('width', '350px');
+
+                document.querySelector('.__awesome-turn-order .ui-dialog-buttonset button:last-of-type').addEventListener('click', () => {
+                    setTimeout(() => {
+                        const $nextActor = document.querySelector('.__awesome-turn-order .characterlist .token');
+                        $nextActor.dispatchEvent(
+                            new MouseEvent("mouseover", {
+                                bubbles: true
+                            })
+                        );
+
+                        setTimeout(() => {
+                            $nextActor.dispatchEvent(
+                                new MouseEvent("mouseout", {
+                                    bubbles: true
+                                })
+                            );
+                        }, 1000)
+                    }, 300);
+                });
+            }
+        }
+
+        const addExtraStylesAndTokenHighlighting = () =>{
+            const $initiativeContent = document.querySelector('#initiativewindow')
+            $initiativeContent.style.setProperty('height', '350px');
+
+            initEventsForTurnOrder($initiativeContent);
+            const $orderDialogButton = document.querySelector('#startrounds');
+            const onTurnOrderClickEvent = () => {
+                initEventsForTurnOrder($initiativeContent);
+                $orderDialogButton.removeEventListener('click', onTurnOrderClickEvent);
+            }
+            $orderDialogButton.addEventListener('click', onTurnOrderClickEvent);
+        }
+
         const tokenBindings = {};
         // Bind tokens to the initiative tracker
         const bindTokens = () => {
@@ -75,20 +115,12 @@
         const initTurnOrderPatch = function () {
             const turnOrderCachedFunction = Campaign.initiativewindow.rebuildInitiativeList;
 
-            const $initiativeContent = document.querySelector('#initiativewindow')
-            $initiativeContent.style.setProperty('height', '350px');
-
-            const $initiativeDialog = $initiativeContent.closest('[role="dialog"]');
-            $initiativeDialog.classList.add('__awesome-turn-order');
-            $initiativeDialog.style.setProperty('width', '350px');
-
             Campaign.initiativewindow.rebuildInitiativeList = function () {
                 let html = initiativeTemplate;
                 const $extraContainer = document.querySelector(".__awesome-turn-order--extra");
                 if ($extraContainer) {
                     $extraContainer.innerHTML = '';
                 }
-
 
                 const replaceStack = [
                     `
@@ -131,25 +163,7 @@
             };
 
             Campaign.initiativewindow.rebuildInitiativeList();
-
-            document.querySelector('.__awesome-turn-order .ui-dialog-buttonset button:last-of-type').addEventListener('click', () => {
-                setTimeout(() => {
-                    const $nextActor = document.querySelector('.__awesome-turn-order .characterlist .token');
-                    $nextActor.dispatchEvent(
-                        new MouseEvent("mouseover", {
-                            bubbles: true
-                        })
-                    );
-
-                    setTimeout(()=>{
-                        $nextActor.dispatchEvent(
-                            new MouseEvent("mouseout", {
-                                bubbles: true
-                            })
-                        );
-                    },1000)
-                }, 300);
-            })
+            addExtraStylesAndTokenHighlighting();
         }
 
         // if we are the topmost frame, inject
