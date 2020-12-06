@@ -7,7 +7,6 @@
             "pp": "@{passive_wisdom}",
         };
         const initiativeTemplate = `
-        <![CDATA[
             <li class='__awesome-turn-order--item token <$ if (this.layer === "gmlayer") { $>gmlayer<$ } $>' data-tokenid='<$!this.id$>' data-currentindex='<$!this.idx$>'>
                 <$ var token = Campaign.pages.get(Campaign.activePage()).thegraphics.get(this.id); $>
                 <$ var char = (token) ? token.character : null; $>
@@ -26,10 +25,10 @@
                     <span class='pictos remove'>#</span>
                 </div>
             </li>
-        ]]>`;
+        `;
 
         const initEventsForTurnOrder = ($initiativeContent) => {
-            const $initiativeDialog = $initiativeContent.closest('[role="dialog"]:not(.__awesome-turn-order)');
+            const $initiativeDialog = $initiativeContent.closest('[role="dialog"]');
             if ($initiativeDialog) {
                 $initiativeDialog.classList.add('__awesome-turn-order');
                 $initiativeDialog.style.setProperty('width', '350px');
@@ -55,17 +54,14 @@
             }
         }
 
-        const addExtraStylesAndTokenHighlighting = () =>{
+        const addExtraStylesAndTokenHighlighting = () => {
             const $initiativeContent = document.querySelector('#initiativewindow')
             $initiativeContent.style.setProperty('height', '350px');
 
             initEventsForTurnOrder($initiativeContent);
-            const $orderDialogButton = document.querySelector('#startrounds');
-            const onTurnOrderClickEvent = () => {
+            document.querySelector('#startrounds').addEventListener('click', () => {
                 initEventsForTurnOrder($initiativeContent);
-                $orderDialogButton.removeEventListener('click', onTurnOrderClickEvent);
-            }
-            $orderDialogButton.addEventListener('click', onTurnOrderClickEvent);
+            });
         }
 
         const tokenBindings = {};
@@ -154,11 +150,10 @@
                 html = html.replace(`<!--REPLACE_TARGET-->`, replaceStack.join(" \n"));
                 document.querySelector("#tmpl_initiativecharacter").innerHTML = html;
 
-
                 const results = turnOrderCachedFunction.apply(this, []);
                 setTimeout(function () {
                     bindTokens();
-                }, 500);
+                }, 300);
                 return results;
             };
 
@@ -172,7 +167,7 @@
                 if (document.readyState === 'complete' && window.Campaign && window.Campaign.initiativewindow) {
                     if (window.is_gm) initTurnOrderPatch();
                 } else {
-                    setTimeout(doCheckDepsLoaded, 500);
+                    setTimeout(doCheckDepsLoaded, 50);
                 }
             })();
         }

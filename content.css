@@ -28,6 +28,15 @@
 
 .__awesome-turn-order--item .initiative {
   min-width: 65px !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+  line-height: 30px;
+}
+
+.__awesome-turn-order--item .initiative input {
+  min-width: 60px;
+  box-sizing: border-box;
+  height: 24px;
 }
 
 .__awesome-turn-order--item .controls {
