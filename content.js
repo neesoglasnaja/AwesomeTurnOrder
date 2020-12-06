@@ -131,6 +131,25 @@
             };
 
             Campaign.initiativewindow.rebuildInitiativeList();
+
+            document.querySelector('.__awesome-turn-order .ui-dialog-buttonset button:last-of-type').addEventListener('click', () => {
+                setTimeout(() => {
+                    const $nextActor = document.querySelector('.__awesome-turn-order .characterlist .token');
+                    $nextActor.dispatchEvent(
+                        new MouseEvent("mouseover", {
+                            bubbles: true
+                        })
+                    );
+
+                    setTimeout(()=>{
+                        $nextActor.dispatchEvent(
+                            new MouseEvent("mouseout", {
+                                bubbles: true
+                            })
+                        );
+                    },1000)
+                }, 300);
+            })
         }
 
         // if we are the topmost frame, inject
