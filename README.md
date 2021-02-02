@@ -1,4 +1,4 @@
-# Awesome Turn Order
+# Awesome Turn Order for Roll20
 
 A small browser extension to help GMs with more informative Turm Order dialog view. No configs are required
 
